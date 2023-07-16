@@ -1,0 +1,23 @@
+server:
+  port: 8081
+
+spring:
+  application:
+    name: moneyapp
+  datasource:
+    username: 'postgres'
+    url: jdbc:postgresql://localhost:5433/moneyapp
+    password: 'postgres'
+  jpa:
+      properties:
+        hibernate:
+          dialect: org.hibernate.dialect.PostgreSQLDialect
+          format_sql: 'true'
+      hibernate:
+        ddl_auto: create-drop
+      show_sql: 'true'
+
+
+exchange-rate-api:
+  base-url: https://v6.exchangerate-api.com
+  api-key: 046fbb2df12082c3e62a0b28
