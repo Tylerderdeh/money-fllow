@@ -1,5 +1,6 @@
 package com.service.moneyfllow.controller;
 
+import com.service.moneyfllow.data.AccountBalanceDTO;
 import com.service.moneyfllow.data.AccountCreationRequest;
 import com.service.moneyfllow.persistence.entity.Account;
 import com.service.moneyfllow.service.IAccountService;
@@ -20,7 +21,7 @@ public class AccountController {
     }
 
     @GetMapping("/{accountId}")
-    public ResponseEntity<Double> getAccountBalance(@PathVariable("accountId") Integer accountId) {
+    public ResponseEntity<AccountBalanceDTO> getAccountBalance(@PathVariable("accountId") Integer accountId) {
         return ResponseEntity.ok(accountService.getAccountBalance(accountId));
     }
 

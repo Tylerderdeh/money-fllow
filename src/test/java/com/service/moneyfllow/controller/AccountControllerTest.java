@@ -1,5 +1,6 @@
 package com.service.moneyfllow.controller;
 
+import com.service.moneyfllow.data.AccountBalanceDTO;
 import com.service.moneyfllow.data.AccountCreationRequest;
 import com.service.moneyfllow.num.AccountType;
 import com.service.moneyfllow.num.Currency;
@@ -64,22 +65,32 @@ class AccountControllerTest {
         Integer accountId = 1;
         double expectedBalance = 100.0;
 
-        Account account = new Account();
-        account.setId(accountId);
-        account.setAccountNumber("1234567890");
-        account.setBalance(expectedBalance);
-        account.setOwnerName("John Doe");
-        account.setAccountType(AccountType.SAVINGS);
+        Account account = Account.builder()
+                .id(accountId)
+                .accountNumber("1234567890")
+                .balance(expectedBalance)
+                .ownerName("John Doe")
+                .accountType(AccountType.SAVINGS)
+                .currency(Currency.USD)
+                .build();
 
-        when(accountService.getAccountBalance(accountId)).thenReturn(expectedBalance);
+        AccountBalanceDTO accountBalanceDTO = AccountBalanceDTO.builder()
+                .accountId(accountId)
+                .balance(expectedBalance)
+                .currency(account.getCurrency().toString())
+                .build();
 
-        ResponseEntity<Double> response = accountController.getAccountBalance(accountId);
+        when(accountService.getAccountBalance(accountId)).thenReturn(accountBalanceDTO);
+
+        ResponseEntity<AccountBalanceDTO> response = accountController.getAccountBalance(accountId);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
 
-        Double returnedBalance = response.getBody();
-        assertNotNull(returnedBalance);
-        assertEquals(expectedBalance, returnedBalance);
+        AccountBalanceDTO returnedAccountBalanceDTO = response.getBody();
+        assertNotNull(returnedAccountBalanceDTO);
+        assertEquals(accountId, returnedAccountBalanceDTO.getAccountId());
+        assertEquals(expectedBalance, returnedAccountBalanceDTO.getBalance());
+        assertEquals(account.getCurrency().toString(), returnedAccountBalanceDTO.getCurrency());
 
         verify(accountService, times(1)).getAccountBalance(accountId);
     }

@@ -1,5 +1,6 @@
 package com.service.moneyfllow.service.impl;
 
+import com.service.moneyfllow.data.AccountBalanceDTO;
 import com.service.moneyfllow.data.AccountCreationRequest;
 import com.service.moneyfllow.exeptions.AccountNotFoundException;
 import com.service.moneyfllow.num.AccountType;
@@ -55,7 +56,7 @@ class AccountServiceTest {
 
         when(accountRepository.getAccountById(accountId)).thenReturn(account);
 
-        Double balance = accountService.getAccountBalance(accountId);
+        AccountBalanceDTO balance = accountService.getAccountBalance(accountId);
 
         assertEquals(account.getBalance(), balance);
     }

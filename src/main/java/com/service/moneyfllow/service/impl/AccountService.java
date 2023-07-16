@@ -1,5 +1,6 @@
 package com.service.moneyfllow.service.impl;
 
+import com.service.moneyfllow.data.AccountBalanceDTO;
 import com.service.moneyfllow.data.AccountCreationRequest;
 import com.service.moneyfllow.exeptions.AccountNotFoundException;
 import com.service.moneyfllow.persistence.entity.Account;
@@ -29,10 +30,14 @@ public class AccountService implements IAccountService {
     }
 
     @Override
-    public Double getAccountBalance(Integer accountId){
+    public AccountBalanceDTO getAccountBalance(Integer accountId){
         Account account = accountRepository.getAccountById(accountId);
         if (account != null) {
-            return account.getBalance();
+            return AccountBalanceDTO.builder()
+                    .accountId(account.getId())
+                    .balance(account.getBalance())
+                    .currency(account.getCurrency().toString())
+                    .build();
         } else {
             throw new AccountNotFoundException("Account not found with id: " + accountId);
         }
